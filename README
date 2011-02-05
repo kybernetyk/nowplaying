@@ -1,2 +1,6 @@
 usage: nowplaying
 license: GPL V3
+
+
+to generate/update the iTunes.h file:
+    sdef /Applications/iTunes.app | sdp -fh --basename iTunes
