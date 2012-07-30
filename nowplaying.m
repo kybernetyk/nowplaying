@@ -95,7 +95,7 @@ int main (int argc, const char * argv[])
 	
 	const char *str_now_playing = [ns_nowplaying cStringUsingEncoding: NSUTF8StringEncoding];
 	
-	fprintf(stdout, "%s\n", str_now_playing);
+	fprintf(stdout, "\u266C %s\n", str_now_playing);
     
 	[pool drain];
     return 0;
