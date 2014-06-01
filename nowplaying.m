@@ -1,8 +1,7 @@
 #import <Foundation/Foundation.h>
 #import "iTunes.h"
 
-NSString *nowPlayingInItunes ()
-{
+NSString *nowPlayingInItunes () {
 	iTunesApplication *iTunes = nil;
 	iTunesTrack *currentTrack = nil;
 	NSString *trackName = nil; 
@@ -10,8 +9,7 @@ NSString *nowPlayingInItunes ()
 	NSString *returnString = nil;
 	
 	iTunes = [SBApplication applicationWithBundleIdentifier:@"com.apple.iTunes"];
-	if (!iTunes)
-	{
+	if (!iTunes) {
 		//NSLog(@"iTunes handle == nil!");
 		return nil;
 	}
@@ -25,26 +23,21 @@ NSString *nowPlayingInItunes ()
 	 the joy of concurrency :)
 	 */
 		
-	if (![iTunes isRunning])
-	{	
+	if (![iTunes isRunning]) {
 		//NSLog(@"iTunes not running == nil!");
 		return nil;
 	}
 	
-	@try
-	{
+	@try {
 		currentTrack = [[iTunes currentTrack] get];
 	}
-	@catch(NSException *e)
-	{
+	@catch(NSException *e) {
 		//NSLog(@"#2 Exception:%@ Reason: %@ Callstack: %@ userInfo: %@",e, [e reason], [e callStackSymbols],[e userInfo] );
 		return nil;
 	}
 
-	if ([currentTrack exists] && [iTunes isRunning])
-	{
-		@try 
-		{
+	if ([currentTrack exists] && [iTunes isRunning]) {
+		@try {
 			trackName = [currentTrack name];
 			if (trackName != nil)
 				trackName= [NSString stringWithString: trackName];
@@ -53,8 +46,7 @@ NSString *nowPlayingInItunes ()
 			if (artistName != nil)
 				artistName = [NSString stringWithString: artistName];
 		}
-		@catch (NSException *e) 
-		{
+		@catch (NSException *e) {
 			/*NSLog(@"#3 Exception:%@ Reason: %@ Callstack: %@ userInfo: %@",e, [e reason], [e callStackSymbols],[e userInfo] );
 			NSLog(@"name: %@", trackName);
 			NSLog(@"artist: %@", artistName);
@@ -67,29 +59,40 @@ NSString *nowPlayingInItunes ()
 	}
 			
 	//now let's build our display string
-	if (artistName && trackName)
+	if (artistName && trackName) {
 		returnString = [NSString stringWithFormat: @"%@ - %@", artistName, trackName];
-	if (artistName && !trackName)
+    }
+	if (artistName && !trackName) {
 		returnString = [NSString stringWithFormat: @"%@", artistName];
-	if (!artistName && trackName)
+    }
+	if (!artistName && trackName) {
 		returnString = [NSString stringWithFormat: @"%@", trackName];
-	if (!artistName && !trackName) //just to be safe. computers are magic!
+    }
+	if (!artistName && !trackName) { //just to be safe. computers are magic!
 		return nil;
+    }
 	
 	return returnString;
 }
 
 
-int main (int argc, const char * argv[]) 
-{
+NSString *nowPlayingInSpotify() {
+    return @"Honk";
+}
+
+int main (int argc, const char * argv[]) {
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
 
 	
-	NSString *ns_nowplaying = nowPlayingInItunes();
-	
-	if (!ns_nowplaying)
-	{
-		fprintf(stderr, "Could not connect to iTunes ...\n");
+	NSString *ns_nowplaying = nil;
+    
+    if (argc == 2 && strcmp(argv[1], "-s") == 0) {
+        ns_nowplaying = nowPlayingInSpotify();
+    } else {
+        ns_nowplaying = nowPlayingInItunes();
+    }
+	if (!ns_nowplaying)	{
+		fprintf(stderr, "Could not connect to server app ...\n");
 		return 1;
 	}
 	
