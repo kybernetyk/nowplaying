@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import "iTunes.h"
+#import "Spotify.h"
 
 NSString *nowPlayingInItunes () {
 	iTunesApplication *iTunes = nil;
@@ -77,7 +78,43 @@ NSString *nowPlayingInItunes () {
 
 
 NSString *nowPlayingInSpotify() {
-    return @"Honk";
+    SpotifyApplication *spotify = [SBApplication applicationWithBundleIdentifier: @"com.spotify.client"];
+    if (!spotify) {
+        return nil;
+    }
+    
+    if (![spotify isRunning]) {
+        return nil;
+    }
+    
+    SpotifyTrack *track = nil;
+    
+    @try {
+        track = [spotify currentTrack];
+    }
+    @catch (NSException *exception) {
+        return nil;
+    }
+    if (!track) {
+        return nil;
+    }
+    
+
+    NSString *trackName = [[track name] copy];
+    NSString *trackArtist = [[track artist] copy];
+    
+    //now let's build our display string
+	if (trackArtist && trackName) {
+		 return [NSString stringWithFormat: @"%@ - %@", trackArtist, trackName];
+    }
+	if (trackArtist && !trackName) {
+		return [NSString stringWithFormat: @"%@", trackArtist];
+    }
+	if (!trackArtist && trackName) {
+		 return [NSString stringWithFormat: @"%@", trackName];
+    }
+
+    return nil;
 }
 
 int main (int argc, const char * argv[]) {
