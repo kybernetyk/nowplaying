@@ -5,7 +5,7 @@
 NSString *nowPlayingInItunes () {
 	iTunesApplication *iTunes = nil;
 	iTunesTrack *currentTrack = nil;
-	NSString *trackName = nil; 
+	NSString *trackName = nil;
 	NSString *artistName = nil;
 	NSString *returnString = nil;
 	
@@ -14,7 +14,7 @@ NSString *nowPlayingInItunes () {
 		//NSLog(@"iTunes handle == nil!");
 		return nil;
 	}
-		
+    
 	
 	/*
 	 now follows a bunch of try/catch stuff and seemingly senseless string copying + double checking.
@@ -23,7 +23,7 @@ NSString *nowPlayingInItunes () {
 	 
 	 the joy of concurrency :)
 	 */
-		
+    
 	if (![iTunes isRunning]) {
 		//NSLog(@"iTunes not running == nil!");
 		return nil;
@@ -36,7 +36,7 @@ NSString *nowPlayingInItunes () {
 		//NSLog(@"#2 Exception:%@ Reason: %@ Callstack: %@ userInfo: %@",e, [e reason], [e callStackSymbols],[e userInfo] );
 		return nil;
 	}
-
+    
 	if ([currentTrack exists] && [iTunes isRunning]) {
 		@try {
 			trackName = [currentTrack name];
@@ -49,16 +49,16 @@ NSString *nowPlayingInItunes () {
 		}
 		@catch (NSException *e) {
 			/*NSLog(@"#3 Exception:%@ Reason: %@ Callstack: %@ userInfo: %@",e, [e reason], [e callStackSymbols],[e userInfo] );
-			NSLog(@"name: %@", trackName);
-			NSLog(@"artist: %@", artistName);
-			NSLog(@"kind: %@", kind);
-			NSLog(@"stream: %@", streamTitle);*/
+             NSLog(@"name: %@", trackName);
+             NSLog(@"artist: %@", artistName);
+             NSLog(@"kind: %@", kind);
+             NSLog(@"stream: %@", streamTitle);*/
 			
 			return nil;
 		}
 		
 	}
-			
+    
 	//now let's build our display string
 	if (artistName && trackName) {
 		returnString = [NSString stringWithFormat: @"%@ - %@", artistName, trackName];
@@ -99,27 +99,27 @@ NSString *nowPlayingInSpotify() {
         return nil;
     }
     
-
+    
     NSString *trackName = [[track name] copy];
     NSString *trackArtist = [[track artist] copy];
     
     //now let's build our display string
 	if (trackArtist && trackName) {
-		 return [NSString stringWithFormat: @"%@ - %@", trackArtist, trackName];
+        return [NSString stringWithFormat: @"%@ - %@", trackArtist, trackName];
     }
 	if (trackArtist && !trackName) {
 		return [NSString stringWithFormat: @"%@", trackArtist];
     }
 	if (!trackArtist && trackName) {
-		 return [NSString stringWithFormat: @"%@", trackName];
+        return [NSString stringWithFormat: @"%@", trackName];
     }
-
+    
     return nil;
 }
 
 int main (int argc, const char * argv[]) {
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-
+    
 	
 	NSString *ns_nowplaying = nil;
     
