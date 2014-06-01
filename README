@@ -2,5 +2,8 @@ usage: nowplaying
 license: GPL V3
 
 
+run without arguments to get now playing track from iTunes.
+run with -s to get track from Spotify
+
 to generate/update the iTunes.h file:
     sdef /Applications/iTunes.app | sdp -fh --basename iTunes
